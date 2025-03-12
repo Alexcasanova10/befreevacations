@@ -1,0 +1,299 @@
+{
+    "usuarios": {
+      "fecha_creacion": {
+        "type": "Date",
+        "default": "Date.now"
+      },
+      "ultima_modificacion": {
+        "type": "Date",
+        "default": "Date.now"
+      },
+      "tipo_usuario": {
+        "type": "String",
+        "enum": ["cliente", "agente_cc", "admin"],
+        "required": true
+      },
+      "info_user": {
+        "type": "ObjectId",
+        "refPath": "tipo_usuario"
+      }
+    },
+
+    "sesiones_usuarios": {
+      "id_tipo_user": { "type": "ObjectId", "ref": "usuarios", "required": true },
+      "tipo_usuario": { "type": "String", "enum": ["cliente", "agente_cc", "admin"], "required": true },
+      "hora_login": { "type": "Date", "default": "Date.now", "required": true },
+      "hora_logout": { "type": "Date" },
+      "timestamps": true
+    },
+      
+    "clientes": {
+        "nombre": { "type": "String", "required": true },
+        "apellido": { "type": "String", "required": true },
+        "email": { "type": "String", "required": true, "unique": true },
+        "password": { "type": "String" },
+        "telefono": { "type": "String" },
+        "direccion_domicilio": { "type": "String" },
+        "fecha_nacimiento": { "type": "Date" },
+        "observaciones": { "type": "String" },
+        "estado": { "type": "String", "enum": ["activo", "inactivo"], "default": "activo" },
+        "googleId": { "type": "String", "unique": true, "sparse": true },
+        "resetPasswordToken": { "type": "String" },
+        "resetPasswordExpires": { "type": "Date" },
+        "login_cliente": { "type": "String" },
+        "url_cliente": { "type": "String" },
+        "token_email": { "type": "String" },
+        "resenas": { "type": "ObjectId", "ref": "resenas" },
+        "createdAt": { "type": "Date", "default": "Date.now" },
+        "updatedAt": { "type": "Date", "default": "Date.now" }
+    },
+    
+    "agentes_cc": {
+        "nombre": { "type": "String", "required": true },
+        "apellido": { "type": "String", "required": true },
+        "email": { "type": "String", "required": true, "unique": true },
+        "password": { "type": "String" },
+        "telefono": { "type": "String" },
+        "direccion_domicilio": { "type": "String" },
+        "fecha_nacimiento": { "type": "Date" },
+        "observaciones": { "type": "String" },
+        "estado": { "type": "String", "enum": ["activo", "inactivo"], "default": "activo" },
+        "login_cliente": { "type": "String" },
+        "url_agente": { "type": "String" },
+        "token_email": { "type": "String" },
+        "resetPasswordToken": { "type": "String" },
+        "resetPasswordExpires": { "type": "Date" },
+        "agencia": { "type": "String", "enum": ["Agencia A", "Agencia B", "Agencia C"] },
+        "createdAt": { "type": "Date", "default": "Date.now" },
+        "updatedAt": { "type": "Date", "default": "Date.now" }
+    },
+    "admins": {
+        "nombre": { "type": "String", "required": true },
+        "apellido": { "type": "String", "required": true },
+        "url_admin": { "type": "String" },
+        "email": { "type": "String", "required": true, "unique": true },
+        "password": { "type": "String" },
+        "telefono": { "type": "String" },
+        "direccion_domicilio": { "type": "String" },
+        "fecha_nacimiento": { "type": "Date" },
+        "observaciones": { "type": "String" },
+        "estado": { "type": "String", "enum": ["activo", "inactivo"], "default": "activo" },
+        "login_cliente": { "type": "String" },
+        "url_cliente": { "type": "String" },
+        "token_email": { "type": "String" },
+        "resetPasswordToken": { "type": "String" },
+        "resetPasswordExpires": { "type": "Date" },
+        "createdUsers": {
+            "type": "Array",
+            "items": {
+                "type": "ObjectId",
+                "ref": "agentes_cc"
+            }
+        },
+        "createdAt": { "type": "Date", "default": "Date.now" },
+        "updatedAt": { "type": "Date", "default": "Date.now" }
+    },
+
+    "productos": {
+        "tipo_producto": { "type": "String", "enum": ["tour", "paquete_hotelero"], "required": true },
+        "producto_id": { "type": "ObjectId", "refPath": "tipo_producto" },
+        "agencia": { "type": "ObjectId", "ref": "Agencias" },
+        "createdAt": { "type": "Date", "default": "Date.now" },
+        "updatedAt": { "type": "Date", "default": "Date.now" }
+    },
+    
+    "tour": {
+        "nombre_tour": { "type": "String", "required": true },
+        "url_tour": { "type": "String" },
+        "descripcion": { "type": "String", "required": true },
+        "itinerario": { "type": "String", "required": true },
+        "precio_por_pax_sin_iva": { "type": "Number", "required": true },
+        "precio_por_pax_con_iva": { "type": "Number", "required": true },
+        "cantidad_pax": { "type": "Number", "required": true },
+        "duracion_horas": { "type": "Number", "required": true },
+        "edad_minima": { "type": "Number" },
+        "caracteristicas": { "type": "String" },
+        "agencia": { "type": "ObjectId", "ref": "Agencias" },
+        "destino": { "type": "ObjectId", "ref": "Destino" },
+        "fecha_disponible": { "type": "Date", "required": true },
+        "cantidad_disponible": { "type": "Number", "required": true },
+         "estrellas": { "type": "Number", "default": 0 },
+        "fotos": [{ "type": "String" }],
+        "codigo_descuento": { "type": "ObjectId", "ref": "codigos_descuentos" },
+        "createdAt": { "type": "Date", "default": "Date.now" },
+        "updatedAt": { "type": "Date", "default": "Date.now" }
+    },
+
+    "paquetes_hoteleros": {
+        "nombre_hotel": { "type": "String", "required": true },
+        "precio_por_pax_sin_iva": { "type": "Number", "required": true },
+        "precio_por_pax_con_iva": { "type": "Number", "required": true },
+        "cantidad_pax": { "type": "Number", "required": true },
+        "descripcion": { "type": "String", "required": true },
+        "caracteristicas": { "type": "String" },
+        "agencia": { "type": "ObjectId", "ref": "Agencias" },
+        "destino": { "type": "ObjectId", "ref": "Destino" },       
+        "fecha_disponible": { "type": "Date", "required": true },
+        "cantidad_disponible": { "type": "Number", "required": true },
+         "estrellas": { "type": "Number", "default": 0 },
+        "fotos": [{ "type": "String" }],
+        "url_pack": { "type": "String" },
+        "codigo_descuento": { "type": "ObjectId", "ref": "codigos_descuentos" },
+        "createdAt": { "type": "Date", "default": "Date.now" },
+        "updatedAt": { "type": "Date", "default": "Date.now" }
+    },
+
+    "resenas": {
+          "fecha_creacion": { "type": "Date", "default": "Date.now" },
+          "fecha_edicion": { "type": "Date" },
+          "estado": { "type": "String", "enum": ["activa", "inactiva"], "default": "activa" },
+          "cliente": { "type": "ObjectId", "ref": "Clientes" },
+          "contenido": { "type": "String", "required": true },
+          "producto": { "type": "ObjectId", "ref": "productos" },
+          "createdAt": { "type": "Date", "default": "Date.now" },
+          "updatedAt": { "type": "Date", "default": "Date.now" }
+        },
+
+    "destinos": {
+        "tipo_destino": { "type": "String", "enum": ["Cabos", "Cancun"], "required": true },
+        "createdAt": { "type": "Date", "default": "Date.now" },
+        "updatedAt": { "type": "Date", "default": "Date.now" }
+      },
+
+    "agencias": {
+        "nombre_agencia": { "type": "String", "required": true },
+        "razon_social": { "type": "String", "required": true },
+        "rfc": { "type": "String", "required": true },
+        "email": { "type": "String", "required": true, "unique": true },
+        "telefono": { "type": "String" },
+        "domicilio": { "type": "String" },
+        "ubicacion": { "type": "String" },
+        "agentes_cc": [{ "type": "ObjectId", "ref": "agentes_cc" }],
+        "productos_agencia": [{ "type": "ObjectId", "ref": "productos" }],
+        "fecha_creacion": { "type": "Date", "default": "Date.now" },
+        "fecha_modificacion": { "type": "Date", "default": "Date.now" },
+        "createdAt": { "type": "Date", "default": "Date.now" },
+        "updatedAt": { "type": "Date", "default": "Date.now" }
+      },
+
+    "formularios_correo": {
+        "nombre_pax": { "type": "String", "required": true },
+        "apellido": { "type": "String", "required": true },
+        "correo": { "type": "String", "required": true },
+        "telefono": { "type": "String" },
+        "mensaje": { "type": "String", "required": true },
+        "fecha_creacion": { "type": "Date", "default": "Date.now" },
+        "fecha_modificacion": { "type": "Date", "default": "Date.now" }
+    },
+    
+    "formularios_correo_producto": {
+        "producto": { "type": "ObjectId", "ref": "productos", "required": true },
+        "nombre_pax": { "type": "String", "required": true },
+        "apellido": { "type": "String", "required": true },
+        "correo": { "type": "String", "required": true },
+        "telefono": { "type": "String" },
+        "mensaje": { "type": "String", "required": true },
+        "motivo_duda": {
+          "type": "String",
+          "enum": ["información general", "cotización específica"],
+          "required": true
+        },
+        "fecha_creacion": { "type": "Date", "default": "Date.now" },
+        "fecha_modificacion": { "type": "Date", "default": "Date.now" }
+    },
+
+    "notificaciones_whatsapp": {
+      "numero_whatsapp": { "type": "String", "required": true },
+      "msg": { "type": "String", "required": true },
+      "fecha_enviado": { "type": "Date", "default": "Date.now", "required": true },
+      "timestamps": true
+    },
+
+    "codigos_descuentos": {
+      "codigo_descuento": { "type": "String", "required": true, "unique": true },
+      "cantidad_descuento": { "type": "Number", "required": true },
+      "tipo_producto": { "type": "ObjectId", "ref": "productos", "required": true },
+      "timestamps": true
+    },
+    
+    "logs_pagos": {
+      "id_pago": { "type": "ObjectId", "ref": "reservas", "required": true },
+      "metodo_pago": { 
+        "type": "String", 
+        "enum": ["stripe", "VISA", "MASTERCARD", "PAYPAL"], 
+        "required": true 
+      },
+      "id_user": { "type": "ObjectId", "refPath": "tipo_usuario", "required": true },
+      "tipo_usuario": { "type": "String", "enum": ["cliente", "agente_cc"], "required": true },
+      "timestamps": true
+    },
+    
+    "reservas": {
+      "user": { "type": "ObjectId", "refPath": "tipo_usuario", "required": true },
+      "tipo_usuario": { "type": "String", "enum": ["cliente", "agente_cc"], "required": true },
+      "reservaItems": [
+        {
+          "nombre_pax_principal": { "type": "String", "required": true },
+          "apellido_pax_principal": { "type": "String", "required": true },
+          "nombre_acompanantes": { "type": "String" },
+          "cantidad_pax": { "type": "Number", "required": true },
+          "imagen_producto": { "type": "String" },
+          "fecha_inicio": { "type": "Date", "required": true },
+          "fecha_fin": { "type": "Date", "required": true },
+          "costo_pax_sin_iva": { "type": "Number", "required": true },
+          "link_pago":{"type": "String"},
+          "precio": { "type": "Number", "required": true },
+          "precio_final": { "type": "Number", "required": true },
+          "producto": { "type": "ObjectId", "ref": "productos", "required": true }
+        }
+      ],
+      "canal_venta": { "type": "String", "enum": ["cliente", "call_center"], "required": true },
+      "isPaid": { "type": "Boolean", "default": false },
+      
+      "transfer": { "type": "String", "enum": ["one way", "roundtrip"], "required": false },
+
+      "costo_total_con_iva": { "type": "Number", "required": true },
+      "estado_reserva": { 
+        "type": "String", 
+        "enum": ["pagado", "pendiente", "cancelada"], 
+        "default": "pendiente" 
+      },
+      "email_pax": { "type": "String", "required": true },
+      "numero_telefono": { "type": "String", "required": true },
+      "metodo_pago": { 
+        "type": "String", 
+        "enum": ["paypal", "stripe", "visa", "mastercard", "amex"]
+      },
+      "id_api_bancaria": { "type": "String" },
+      "timestamps": true
+    },
+    "entradas": {
+      "id_reserva": { "type": "ObjectId", "ref": "reservas", "required": true },
+      "url_documento": { "type": "String", "required": true },
+      "tipo_entrada": { "type": "String", "enum": ["tour", "paquete_hotelero"], "required": true },
+      "fecha_creacion": { "type": "Date", "default": "Date.now" },
+      "fecha_modificacion": { "type": "Date", "default": "Date.now" }
+    }
+
+
+}
+
+      
+      
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
